@@ -103,4 +103,33 @@ public class FA2022_Student_Caddell
 			return 'E';
 		}
 	}
+	
+	/**
+	 * Method to display object contents via toString
+	 * @return Report showing all grades associated with each assignment category
+	 */
+	public String toString()
+	{
+		return "FA2022_16WeekGradingApplication_Caddell.java\n"
+			 + "FINAL GRADE OF STUDENT - CORY CADDELL\n"
+			 + "--------------------------------------------------------------------------------------\n"
+			 + String.format("%-15s%-15s\n", "COURSE NAME:", courseName)
+			 + String.format("%-15s%-15s\n", "STUDENT ID:", courseName)
+			 + String.format("%-15s%-15s\n", "NAME:", courseName)
+			 + "--------------------------------------------------------------------------------------\n"
+			 + String.format("%-15s%-15s\n", "POLICY QUIZ:", courseName)
+			 + String.format("%-15s%-15s\n", assignmentNames[0], studentScoresString[0])
+			 + String.format("%-15s%-15s\n", assignmentNames[1], studentScoresString[1])
+			 + String.format("%-15s%-15s\n", assignmentNames[2], studentScoresString[2])
+			 + String.format("%-15s%-15s\n", assignmentNames[3], studentScoresString[3])
+			 + String.format("%-15s%-15s\n", assignmentNames[4], studentScoresString[4])
+			 + String.format("%-15s%-15s\n", assignmentNames[5], studentScoresString[5])
+			 + String.format("%-15s%-15s\n", assignmentNames[6], studentScoresString[6])
+			 + "--------------------------------------------------------------------------------------\n"
+			 + String.format("%-15s%15s\n", "Total STUDENT Score:", calcTotalStudentScores())
+			 + String.format("%-15s%15s\n", "Total MAX score:", calcTotalMaxScore())
+			 + String.format("%-15s%15s\n", "Numeric Grade:", calcNumericGrade())
+			 + String.format("%-15s%15s\n", "Letter Grade:", determineLetterGrade())
+			 + "--------------------------------------------------------------------------------------";
+	}
 }
