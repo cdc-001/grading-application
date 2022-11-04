@@ -1,5 +1,7 @@
 //FA2022_Student_Caddell.java
 
+import java.io.*;
+
 public class FA2022_Student_Caddell 
 {
 	private String courseName;									// Name of course
@@ -10,7 +12,7 @@ public class FA2022_Student_Caddell
 	
 	private final int ARRAY_SIZE = 7;
 	private String[] assignmentNames = new String[ARRAY_SIZE];		// Names of each assignment category
-	private int[] studentScores = new int[ARRAY_SIZE];				// Cumulative score per assignment category
+	private int[][] studentScores = new int[ARRAY_SIZE][];				// Cumulative score per assignment category
 	private String[] studentScoresString = new String[ARRAY_SIZE];	// Combines scores and category category info.
 	
 	/** Method to create no-argument constructor */
@@ -33,18 +35,22 @@ public class FA2022_Student_Caddell
 	 * @param ss assignment score array
 	 * @param sss combined assignment score and name string
 	 */
-	public FA2022_Student_Caddell(String cn, String sn, String id, int ex, String[] an, int[] ss, String[] sss)
+	public FA2022_Student_Caddell(String cn, String sn, String id, int ex, String[] an, int[][] ss, String[] sss)
 	{
 		courseName = cn;
 		studentName = sn;
 		studentID = id;
 		extraCreditScore = ex;
 		
-		for(int i = 0; i < ARRAY_SIZE; i++)
+		for(int row = 0; row < ARRAY_SIZE; row++)
 		{
-			assignmentNames[i] = an[i];
-			studentScores[i] = ss[i];
-			studentScoresString[i] = sss[i];
+			assignmentNames[row] = an[row];
+			studentScoresString[row] = sss[row];
+			
+			for (int col = 0; col < ss[row].length; col++)
+			{
+				studentScores[row] = ss[col];
+			}
 		}	
 	}
 	
@@ -52,9 +58,12 @@ public class FA2022_Student_Caddell
 	public void calcTotalMaxScore()
 	{
 		totalMaxScore = 0;
-		for (int scores : studentScores)
+		for (int row = 0; row < studentScores.length; row++)
 		{
-			totalMaxScore += scores;
+			for (int col = 0; col < studentScores[row].length; col++)
+			{
+				totalMaxScore += studentScores[row][col];
+			}
 		}
 	}
 	
@@ -102,6 +111,25 @@ public class FA2022_Student_Caddell
 		{
 			return 'E';
 		}
+	}
+	
+	/** Method to write student information to output file */
+	public void toFile() throws IOException
+	{
+		PrintWriter outputFile = new PrintWriter("student-grades.txt");
+		
+		outputFile.print(courseName + ", " + studentID + ", " + ", " + studentName 
+						+ calcNumericGrade() + ", " + determineLetterGrade() + ",");
+		
+		for(int row = 0; row < studentScores.length; row++)
+		{
+			for (int col = 0; col < studentScores[row].length; col++)
+			{
+				outputFile.print(((if col > 0) ? ", " : "") + studentScores[row][col] + " ");
+			}
+		}
+		
+		outputFile.close();
 	}
 	
 	/**
