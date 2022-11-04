@@ -12,7 +12,7 @@ public class FA2022_Student_Caddell
 	
 	private final int ARRAY_SIZE = 7;
 	private String[] assignmentNames = new String[ARRAY_SIZE];		// Names of each assignment category
-	private int[][] studentScores = new int[ARRAY_SIZE][];				// Cumulative score per assignment category
+	private int[][] studentScores = new int[ARRAY_SIZE][];			// Cumulative score per assignment category
 	private String[] studentScoresString = new String[ARRAY_SIZE];	// Combines scores and category category info.
 	
 	/** Method to create no-argument constructor */
@@ -125,15 +125,24 @@ public class FA2022_Student_Caddell
 		{
 			for (int col = 0; col < studentScores[row].length; col++)
 			{
-				outputFile.print(((if col > 0) ? ", " : "") + studentScores[row][col] + " ");
+				outputFile.print(((col > 0) ? ", " : "") + studentScores[row][col]);
 			}
 		}
 		
 		outputFile.close();
 	}
 	
+	/** Method to display minimum student information to screen */
+	public String shortOutput()
+	{
+		return 	String.format("%-15s%15.2f\n", "Total STUDENT Score:", calcTotalStudentScores())
+			  + String.format("%-15s%15.2f\n", "Total MAX score:", totalMaxScore)
+		  	  + String.format("%-15s%15.2f\n", "Numeric Grade:", calcNumericGrade())
+		  	  + String.format("%-15s%1sf\n", "Letter Grade:", determineLetterGrade());
+	}
+	
 	/**
-	 * Method to display object contents via toString
+	 * Method to display detailed student information via toString to screen
 	 * @return Report showing all grades associated with each assignment category
 	 */
 	public String toString()
@@ -142,8 +151,8 @@ public class FA2022_Student_Caddell
 			 + "FINAL GRADE OF STUDENT - CORY CADDELL\n"
 			 + "--------------------------------------------------------------------------------------\n"
 			 + String.format("%-15s%-15s\n", "COURSE NAME:", courseName)
-			 + String.format("%-15s%-15s\n", "STUDENT ID:", courseName)
-			 + String.format("%-15s%-15s\n", "NAME:", courseName)
+			 + String.format("%-15s%-15s\n", "STUDENT ID:", studentID)
+			 + String.format("%-15s%-15s\n", "NAME:", studentID)
 			 + "--------------------------------------------------------------------------------------\n"
 			 + String.format("%-15s%-15s\n", "POLICY QUIZ:", courseName)
 			 + String.format("%-15s%-15s\n", assignmentNames[0], studentScoresString[0])
@@ -154,9 +163,9 @@ public class FA2022_Student_Caddell
 			 + String.format("%-15s%-15s\n", assignmentNames[5], studentScoresString[5])
 			 + String.format("%-15s%-15s\n", assignmentNames[6], studentScoresString[6])
 			 + "--------------------------------------------------------------------------------------\n"
-			 + String.format("%-15s%15s\n", "Total STUDENT Score:", calcTotalStudentScores())
-			 + String.format("%-15s%15s\n", "Total MAX score:", calcTotalMaxScore())
-			 + String.format("%-15s%15s\n", "Numeric Grade:", calcNumericGrade())
+			 + String.format("%-15s%15.2f\n", "Total STUDENT Score:", calcTotalStudentScores())
+			 + String.format("%-15d%15.2f\n", "Total MAX score:", totalMaxScore)
+			 + String.format("%-15s%15.2f\n", "Numeric Grade:", calcNumericGrade())
 			 + String.format("%-15s%15s\n", "Letter Grade:", determineLetterGrade())
 			 + "--------------------------------------------------------------------------------------";
 	}
