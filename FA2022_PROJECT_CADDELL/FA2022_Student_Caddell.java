@@ -45,7 +45,34 @@ public class FA2022_Student_Caddell
 			assignmentNames[i] = an[i];
 			studentScores[i] = ss[i];
 			studentScoresString[i] = sss[i];
+		}	
+	}
+	
+	/** Method to calculate cumulative total max score of all standard assignments */
+	public void calcTotalMaxScore()
+	{
+		totalMaxScore = 0;
+		for (int scores : studentScores)
+		{
+			totalMaxScore += scores;
 		}
-		
+	}
+	
+	/** 
+	 * Method to calculate total student score
+	 * @return  sum of total max score and extra credit score
+	*/
+	public int calcTotalStudentScores()
+	{
+		return totalMaxScore + extraCreditScore;
+	}
+	
+	/**
+	 * Method to calculate numeric grade
+	 * @return total student score multiplied by 100 and divided by total max score
+	 */
+	public float calcNumericGrade()
+	{
+		return 100 * calcTotalStudentScores() / totalMaxScore;
 	}
 }
