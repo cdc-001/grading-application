@@ -75,4 +75,32 @@ public class FA2022_Student_Caddell
 	{
 		return 100 * calcTotalStudentScores() / totalMaxScore;
 	}
+	
+	/**
+	 * Method to determine letter grade
+	 * @return Letter grade A - F
+	 */
+	public char determineLetterGrade()
+	{
+		if (calcNumericGrade() >= 90)
+		{
+			return 'A';
+		}
+		else if(calcNumericGrade() >= 80)
+		{
+			return 'B';
+		}
+		else if(calcNumericGrade() >= 70)
+		{
+			return 'C';
+		}
+		else if(calcNumericGrade() >= 60)
+		{
+			return 'D';
+		}
+		else
+		{
+			return 'E';
+		}
+	}
 }
