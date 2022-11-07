@@ -8,7 +8,9 @@ public class FA2022_16WeeksGradingApplication_Caddell
 	{
 		final int ARRAY_SIZE = 7;
 		
-		String[] assignmentNames = {"Quiz", "Homework", "Lab", "Project", "Teamwork", "Topic", "Test"};
+		String[] assignmentNames = {"Quiz", "Homework", "Lab", "Project", "Teamwork", "Topic", "Test"};			//Assignment categories
+		int[] assignmentSizes = new int[ARRAY_SIZE];															//How many assignments within each assignment category
+		float[] maxScores = new float[ARRAY_SIZE];
 		int[][] assignmentScores = new int[ARRAY_SIZE][];
 		String[] studentScoresString = new String[ARRAY_SIZE];
 		
@@ -39,41 +41,42 @@ public class FA2022_16WeeksGradingApplication_Caddell
 				case 0:
 					break;
 				case 1:
-					readScores(selection, assignmentNames, assignmentScores, keyboard);
+					readAssignmentInfo(selection, assignmentNames, assignmentSizes, maxScores, keyboard);
 					break;
 				case 2:
-					readScores(selection, assignmentNames, assignmentScores, keyboard);
+					readAssignmentInfo(selection, assignmentNames, assignmentSizes, maxScores, keyboard);
 					break;
 				case 3:
-					readScores(selection, assignmentNames, assignmentScores, keyboard);
+					readAssignmentInfo(selection, assignmentNames, assignmentSizes, maxScores, keyboard);
 					break;
 				case 4:
-					readScores(selection, assignmentNames, assignmentScores, keyboard);
+					readAssignmentInfo(selection, assignmentNames, assignmentSizes, maxScores, keyboard);
 					break;
 				case 5:
-					readScores(selection, assignmentNames, assignmentScores, keyboard);
+					readAssignmentInfo(selection, assignmentNames, assignmentSizes, maxScores, keyboard);
 					break;
 				case 6:
-					readScores(selection, assignmentNames, assignmentScores, keyboard);
+					readAssignmentInfo(selection, assignmentNames, assignmentSizes, maxScores, keyboard);
 					break;
 				case 7:
-					readScores(selection, assignmentNames, assignmentScores, keyboard);
+					readAssignmentInfo(selection, assignmentNames, assignmentSizes, maxScores, keyboard);
 					break;
 				default:
 					System.out.println("Invalid selection.");
-					break;
 			}
 			
+			//User confirm input is correct
 			confirm = 'n';
 			if(selection == 0)
 			{
-				studentScoresToString(assignmentNames, assignmentScores, studentScoresString);
-				System.out.println("Confirm your scores are correct: ");
-				for (String scores : studentScoresString)
+				System.out.println("Confirm the following is correct: ");
+				for (int i = 0; i < ARRAY_SIZE; i++)
 				{
-					System.out.println("  " + scores);
+					System.out.println("  " + 
+									   String.format("%-10s%-10s", assignmentNames[i] + ": ", "Total assignments = " 
+									 + assignmentSizes[i] + "; Maximum score = " + maxScores[i]));
 				}
-				System.out.print("Yes or No: ");
+				System.out.print("Enter \"Yes\" to proceed or \"No\" to return to main menu: ");
 				keyboard.nextLine();
 				input = keyboard.nextLine();
 				input.toLowerCase();
@@ -82,7 +85,7 @@ public class FA2022_16WeeksGradingApplication_Caddell
 				while(confirm != 'y' && confirm != 'n')
 				{
 					System.out.print("Invalid input.\n"
-									+ "Yes or No: ");
+									+ "Enter \"Yes\" to proceed or \"No\" to return to main menu: ");
 					input = keyboard.nextLine();
 					confirm = input.charAt(0);
 				}
@@ -100,6 +103,20 @@ public class FA2022_16WeeksGradingApplication_Caddell
 							 + "3.Printing the Grades of Class\n"
 							 + "0.Exit");
 			selection = keyboard.nextInt();
+			
+			switch (selection)
+			{
+				case 0:
+					break;
+				case 1:
+					break;
+				case 2:
+					break;
+				case 3:
+					break;
+				default:
+					System.out.println("Invalid selection.");
+			}
 
 			
 		}while(selection != 0);
@@ -107,20 +124,34 @@ public class FA2022_16WeeksGradingApplication_Caddell
 		System.out.println("Thank you! Have a nice day!");
 	}
 	
-	/*
-	 * Method to read and store assignment scores in the respective row of assignment array
+	/**
+	 * Method to read and store assignment size and max score per assignment category
 	 * @param select User assignment selection
 	 * @param names Assignment names
-	 * @param scores Assignment score array
+	 * @param size Assignment size
+	 * @param max Assignment max score
 	 * @param k Scanner class, keyboard object
 	 */
-	public static void readScores(int select, String[] names, int[][] scores, Scanner k)
+	public static void readAssignmentInfo(int select, String[] names, int[] size, float[] max, Scanner k)
 	{
-		int max;
+		int num;
 		System.out.print("How many " + names[select - 1] + " scores? ");
-		max = k.nextInt();
+		num = k.nextInt();
 		
-		scores[select -1] = new int[max];
+		size[select - 1] = num;
+		
+		System.out.print("Enter maximum score for " + names[select - 1] + " assignment(s): "); 
+		max[select - 1] = k.nextInt();
+	}
+	
+	/*
+	public static void readStudentScores(int select, String[] names, int[][] score, Scanner k)
+	{
+		int num;
+		System.out.print("How many " + names[select - 1] + " scores? ");
+		num = k.nextInt();
+		
+		size[select -1] = new int[max];
 		
 		for (int i = 0; i < max; i++)
 		{
@@ -128,13 +159,14 @@ public class FA2022_16WeeksGradingApplication_Caddell
 			scores[select - 1][i] = k.nextInt();
 		}
 	}
+	*/
 	
 	/*
 	 * Method to combine assignment names and scores into string
 	 * @param names assignment names array
 	 * @param scores assignment score array
 	 * @param toString student scores string array
-	 */
+	 
 	public static void studentScoresToString(String[] names, int[][] scores, String[] toString)
 	{
 		for (int row = 0; row < names.length; row++)
@@ -146,4 +178,5 @@ public class FA2022_16WeeksGradingApplication_Caddell
 			}
 		}
 	}
+	*/
 }
