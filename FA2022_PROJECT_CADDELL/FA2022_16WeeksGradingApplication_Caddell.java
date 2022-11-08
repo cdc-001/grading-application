@@ -17,7 +17,7 @@ public class FA2022_16WeeksGradingApplication_Caddell
 		String courseName,
 			   studentID,
 			   studentName;
-		int selection;					//Menu selection
+		int selection;																							//Menu selection
 		String input;
 		char confirm;
 		boolean debug = true;
@@ -31,44 +31,32 @@ public class FA2022_16WeeksGradingApplication_Caddell
 			System.out.println("FA2022_16WeeksGradingApplication_Caddell.java\n"
 							 + "LIST OF ASSIGNMENTS  – CORY CADDELL\n"
 							 + "--------------------------------------------------------------------\n"
-							 + "1.QUIZ\n2.HOMEWORK\n3.LAB\n4.PROJECT\n5.TEAMWORK6.TOPIC\n7.TEST\n0.EXIT");
+							 + "1.QUIZ\n2.HOMEWORK\n3.LAB\n4.PROJECT\n5.TEAMWORK\n6.TOPIC\n7.TEST\n0.EXIT");
 			
 			//Read input from user
 			selection = keyboard.nextInt();
+			System.out.println();
 			
-			switch (selection)
+			while(selection < 0 || selection > 7)
 			{
-				case 0:
-					break;
-				case 1:
-					readAssignmentInfo(selection, assignmentNames, assignmentSizes, maxScores, keyboard);
-					break;
-				case 2:
-					readAssignmentInfo(selection, assignmentNames, assignmentSizes, maxScores, keyboard);
-					break;
-				case 3:
-					readAssignmentInfo(selection, assignmentNames, assignmentSizes, maxScores, keyboard);
-					break;
-				case 4:
-					readAssignmentInfo(selection, assignmentNames, assignmentSizes, maxScores, keyboard);
-					break;
-				case 5:
-					readAssignmentInfo(selection, assignmentNames, assignmentSizes, maxScores, keyboard);
-					break;
-				case 6:
-					readAssignmentInfo(selection, assignmentNames, assignmentSizes, maxScores, keyboard);
-					break;
-				case 7:
-					readAssignmentInfo(selection, assignmentNames, assignmentSizes, maxScores, keyboard);
-					break;
-				default:
-					System.out.println("Invalid selection.");
+				System.out.print("Invalid selection.  Please try again. ");
+				selection = keyboard.nextInt();
 			}
 			
-			//User confirm input is correct
 			confirm = 'n';
-			if(selection == 0)
+			if (selection > 0)
 			{
+				System.out.print("How many " + assignmentNames[selection - 1] + " scores? ");
+				assignmentSizes[selection - 1] = keyboard.nextInt();
+				
+				System.out.print("Enter maximum score for each " + assignmentNames[selection - 1] + " assignment: "); 
+				maxScores[selection - 1] = keyboard.nextInt() * assignmentSizes[selection - 1];
+				
+				System.out.println();
+			}
+			else
+			{
+				//User confirm input is correct
 				System.out.println("Confirm the following is correct: ");
 				for (int i = 0; i < ARRAY_SIZE; i++)
 				{
@@ -90,12 +78,11 @@ public class FA2022_16WeeksGradingApplication_Caddell
 					confirm = input.charAt(0);
 				}
 			}
-	
 		}while(confirm != 'y');
 				
 		do
 		{
-			System.out.println("FA2022_16WeeksGradingApplication_Caddell.java\n"
+			System.out.println("\nFA2022_16WeeksGradingApplication_Caddell.java\n"
 							 + "TASK OF GRADING – CORY CADDELL\n"
 							 + "--------------------------------------------------------------------\n"
 							 + "1.Grading One Student\n"
@@ -117,32 +104,11 @@ public class FA2022_16WeeksGradingApplication_Caddell
 				default:
 					System.out.println("Invalid selection.");
 			}
-
-			
 		}while(selection != 0);
 		
 		System.out.println("Thank you! Have a nice day!");
 	}
-	
-	/**
-	 * Method to read and store assignment size and max score per assignment category
-	 * @param select User assignment selection
-	 * @param names Assignment names
-	 * @param size Assignment size
-	 * @param max Assignment max score
-	 * @param k Scanner class, keyboard object
-	 */
-	public static void readAssignmentInfo(int select, String[] names, int[] size, float[] max, Scanner k)
-	{
-		int num;
-		System.out.print("How many " + names[select - 1] + " scores? ");
-		num = k.nextInt();
-		
-		size[select - 1] = num;
-		
-		System.out.print("Enter maximum score for " + names[select - 1] + " assignment(s): "); 
-		max[select - 1] = k.nextInt();
-	}
+
 	
 	/*
 	public static void readStudentScores(int select, String[] names, int[][] score, Scanner k)
