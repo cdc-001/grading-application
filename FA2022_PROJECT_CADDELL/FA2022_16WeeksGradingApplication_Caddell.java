@@ -1,22 +1,18 @@
 //FA2022_16WeeksGradingApplication_Caddell.java
 
 import java.util.Scanner;
+import java.io.*;
 
 public class FA2022_16WeeksGradingApplication_Caddell 
 {
-	public static void main(String[] args)
+	final static int ARRAY_SIZE = 7;
+	public static void main(String[] args) throws IOException
 	{
-		final int ARRAY_SIZE = 7;
 		
 		String[] assignmentNames = {"Quiz", "Homework", "Lab", "Project", "Teamwork", "Topic", "Test"};			//Assignment categories
 		int[] assignmentSizes = new int[ARRAY_SIZE];															//How many assignments within each assignment category
 		float[] maxScores = new float[ARRAY_SIZE];
-		int[][] assignmentScores = new int[ARRAY_SIZE][];
-		String[] studentScoresString = new String[ARRAY_SIZE];
 		
-		String courseName,
-			   studentID,
-			   studentName;
 		int selection;																							//Menu selection
 		String input;
 		char confirm;
@@ -37,7 +33,7 @@ public class FA2022_16WeeksGradingApplication_Caddell
 			selection = keyboard.nextInt();
 			System.out.println();
 			
-			while(selection < 0 || selection > 7)
+			while(selection < 0 || selection > 7)		//Input validation
 			{
 				System.out.print("Invalid selection.  Please try again. ");
 				selection = keyboard.nextInt();
@@ -56,7 +52,7 @@ public class FA2022_16WeeksGradingApplication_Caddell
 			}
 			else
 			{
-				//User confirm input is correct
+				//User, confirm input is correct
 				System.out.println("Confirm the following is correct: ");
 				for (int i = 0; i < ARRAY_SIZE; i++)
 				{
@@ -70,7 +66,7 @@ public class FA2022_16WeeksGradingApplication_Caddell
 				input.toLowerCase();
 				confirm = input.charAt(0);
 				
-				while(confirm != 'y' && confirm != 'n')
+				while(confirm != 'y' && confirm != 'n')		//Input validation
 				{
 					System.out.print("Invalid input.\n"
 									+ "Enter \"Yes\" to proceed or \"No\" to return to main menu: ");
@@ -93,56 +89,87 @@ public class FA2022_16WeeksGradingApplication_Caddell
 			
 			switch (selection)
 			{
-				case 0:
+				case 0:		//Exit
 					break;
-				case 1:
+				case 1:  	//Grade one student		
+					//Read student information from keyboard
+					FA2022_Student_Caddell student1 = studentGrades(keyboard, assignmentSizes, assignmentNames);
+					
+					//Display student information to screen
+					System.out.println("\n" + student1);
+					
+					//Write student information to file
+					student1.toFile();
+					
 					break;
-				case 2:
+				case 2:		//Display grade of one student from file
 					break;
-				case 3:
+				case 3:		//Display grades of one class
 					break;
 				default:
-					System.out.println("Invalid selection.");
+					System.out.println("Invalid selection. Please try again.");
 			}
 		}while(selection != 0);
 		
 		System.out.println("Thank you! Have a nice day!");
 	}
 
-	
-	/*
-	public static void readStudentScores(int select, String[] names, int[][] score, Scanner k)
+	/** Method to read student information and create object
+	 * 
+	 * @param keyboard Scanner class object to read keyboard input.
+	 * @param assignmentSizes Number of assignments per assignment category
+	 * @param assignmentNames Assignment category names
+	 * @return Instance of FA2022_Student_Caddell class
+	 */
+	public static FA2022_Student_Caddell studentGrades(Scanner keyboard, int[] assignmentSizes, String[] assignmentNames)
 	{
-		int num;
-		System.out.print("How many " + names[select - 1] + " scores? ");
-		num = k.nextInt();
+		String courseName,
+			   studentID,
+		       studentName;
+		float policyQuiz;
+		float[][] studentScores = new float[ARRAY_SIZE][];
+		String[] studentScoresString = new String[ARRAY_SIZE];
+				
+		System.out.println("Enter the following information for student: ");
+		keyboard.nextLine();
 		
-		size[select -1] = new int[max];
+		System.out.print("  Course name: ");
+		courseName = keyboard.nextLine();
 		
-		for (int i = 0; i < max; i++)
+		System.out.print("  Student ID: ");
+		studentID = keyboard.nextLine();
+		
+		System.out.print("  Student Name: ");
+		studentName = keyboard.nextLine();
+		
+		System.out.println("Enter the following grades: ");
+		
+		System.out.print("  Policy Quiz: ");
+		policyQuiz = keyboard.nextInt();
+		
+		for (int row = 0; row < ARRAY_SIZE; row++)
 		{
-			System.out.print("Enter your score for " + names[select - 1] + " " + (i + 1) + ": "); 
-			scores[select - 1][i] = k.nextInt();
-		}
-	}
-	*/
-	
-	/*
-	 * Method to combine assignment names and scores into string
-	 * @param names assignment names array
-	 * @param scores assignment score array
-	 * @param toString student scores string array
-	 
-	public static void studentScoresToString(String[] names, int[][] scores, String[] toString)
-	{
-		for (int row = 0; row < names.length; row++)
-		{
-			toString[row] = names[row] + ":";
-			for (int col = 0; col < scores[row].length; col++)
+			studentScores[row] = new float[assignmentSizes[row]];
+
+			for (int col = 0; col < assignmentSizes[row]; col++)
 			{
-				toString[row] += ((col > 0) ? ", " : " ") + scores[row][col]; 
+				System.out.print("  " + assignmentNames[row] + " " + (col + 1) + ": ");
+				studentScores[row][col] = keyboard.nextInt();
 			}
 		}
+		
+		for (int row = 0; row < ARRAY_SIZE; row++)
+		{
+			studentScoresString[row] = "";
+			for (int col = 0; col < studentScores[row].length; col++)
+			{
+				studentScoresString[row] += ((col > 0 ? ", " : "") + studentScores[row][col]);
+			}
+		}
+		
+		FA2022_Student_Caddell student = new FA2022_Student_Caddell(courseName, studentID, studentName, policyQuiz, assignmentNames, studentScores, studentScoresString);
+		
+		return student;
 	}
-	*/
+
 }

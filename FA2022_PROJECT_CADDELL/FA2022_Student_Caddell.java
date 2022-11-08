@@ -5,14 +5,14 @@ import java.io.*;
 public class FA2022_Student_Caddell 
 {
 	private String courseName;									// Name of course
-	private String studentName;									// Name of student
 	private String studentID;									// Student ID number
-	private int extraCreditScore;								// Score of extra credit assignment
-	private int totalMaxScore;									// Cumulative score of all assignments
+	private String studentName;									// Name of student
+	private float extraCreditScore;								// Score of extra credit assignment
+	private float totalMaxScore;									// Cumulative score of all assignments
 	
 	private final int ARRAY_SIZE = 7;
 	private String[] assignmentNames = new String[ARRAY_SIZE];		// Names of each assignment category
-	private int[][] studentScores = new int[ARRAY_SIZE][];			// Cumulative score per assignment category
+	private float[][] studentScores = new float[ARRAY_SIZE][];			// Cumulative score per assignment category
 	private String[] studentScoresString = new String[ARRAY_SIZE];	// Combines scores and category category info.
 	
 	/** Method to create no-argument constructor */
@@ -35,7 +35,7 @@ public class FA2022_Student_Caddell
 	 * @param ss assignment score array
 	 * @param sss combined assignment score and name string
 	 */
-	public FA2022_Student_Caddell(String cn, String sn, String id, int ex, String[] an, int[][] ss, String[] sss)
+	public FA2022_Student_Caddell(String cn, String sn, String id, float ex, String[] an, float[][] ss, String[] sss)
 	{
 		courseName = cn;
 		studentName = sn;
@@ -55,7 +55,7 @@ public class FA2022_Student_Caddell
 	}
 	
 	/** Method to calculate cumulative total max score of all standard assignments */
-	public void calcTotalMaxScore()
+	public float calcTotalMaxScore()
 	{
 		totalMaxScore = 0;
 		for (int row = 0; row < studentScores.length; row++)
@@ -65,15 +65,16 @@ public class FA2022_Student_Caddell
 				totalMaxScore += studentScores[row][col];
 			}
 		}
+		return totalMaxScore;
 	}
 	
 	/** 
 	 * Method to calculate total student score
 	 * @return  sum of total max score and extra credit score
 	*/
-	public int calcTotalStudentScores()
+	public float calcTotalStudentScores()
 	{
-		return totalMaxScore + extraCreditScore;
+		return calcTotalMaxScore() + extraCreditScore;
 	}
 	
 	/**
@@ -82,7 +83,7 @@ public class FA2022_Student_Caddell
 	 */
 	public float calcNumericGrade()
 	{
-		return 100 * calcTotalStudentScores() / totalMaxScore;
+		return 100 * calcTotalStudentScores() / calcTotalMaxScore();
 	}
 	
 	/**
@@ -91,19 +92,19 @@ public class FA2022_Student_Caddell
 	 */
 	public char determineLetterGrade()
 	{
-		if (calcNumericGrade() >= 90)
+		if (calcNumericGrade() >= 90.0)
 		{
 			return 'A';
 		}
-		else if(calcNumericGrade() >= 80)
+		else if(calcNumericGrade() >= 80.0)
 		{
 			return 'B';
 		}
-		else if(calcNumericGrade() >= 70)
+		else if(calcNumericGrade() >= 70.0)
 		{
 			return 'C';
 		}
-		else if(calcNumericGrade() >= 60)
+		else if(calcNumericGrade() >= 60.0)
 		{
 			return 'D';
 		}
@@ -150,23 +151,23 @@ public class FA2022_Student_Caddell
 		return "FA2022_16WeekGradingApplication_Caddell.java\n"
 			 + "FINAL GRADE OF STUDENT - CORY CADDELL\n"
 			 + "--------------------------------------------------------------------------------------\n"
-			 + String.format("%-15s%-15s\n", "COURSE NAME:", courseName)
-			 + String.format("%-15s%-15s\n", "STUDENT ID:", studentID)
-			 + String.format("%-15s%-15s\n", "NAME:", studentID)
+			 + String.format("%-21s%-15s\n", "COURSE NAME:", courseName)
+			 + String.format("%-21s%-15s\n", "STUDENT ID:", studentID)
+			 + String.format("%-21s%-15s\n", "NAME:", studentID)
 			 + "--------------------------------------------------------------------------------------\n"
-			 + String.format("%-15s%-15s\n", "POLICY QUIZ:", courseName)
-			 + String.format("%-15s%-15s\n", assignmentNames[0], studentScoresString[0])
-			 + String.format("%-15s%-15s\n", assignmentNames[1], studentScoresString[1])
-			 + String.format("%-15s%-15s\n", assignmentNames[2], studentScoresString[2])
-			 + String.format("%-15s%-15s\n", assignmentNames[3], studentScoresString[3])
-			 + String.format("%-15s%-15s\n", assignmentNames[4], studentScoresString[4])
-			 + String.format("%-15s%-15s\n", assignmentNames[5], studentScoresString[5])
-			 + String.format("%-15s%-15s\n", assignmentNames[6], studentScoresString[6])
+			 + String.format("%-21s%-15.2f\n", "POLICY QUIZ:", extraCreditScore)
+			 + String.format("%-21s%-15s\n", assignmentNames[0], studentScoresString[0])
+			 + String.format("%-21s%-15s\n", assignmentNames[1], studentScoresString[1])
+			 + String.format("%-21s%-15s\n", assignmentNames[2], studentScoresString[2])
+			 + String.format("%-21s%-15s\n", assignmentNames[3], studentScoresString[3])
+			 + String.format("%-21s%-15s\n", assignmentNames[4], studentScoresString[4])
+			 + String.format("%-21s%-15s\n", assignmentNames[5], studentScoresString[5])
+			 + String.format("%-21s%-15s\n", assignmentNames[6], studentScoresString[6])
 			 + "--------------------------------------------------------------------------------------\n"
-			 + String.format("%-15s%15.2f\n", "Total STUDENT Score:", calcTotalStudentScores())
-			 + String.format("%-15d%15.2f\n", "Total MAX score:", totalMaxScore)
-			 + String.format("%-15s%15.2f\n", "Numeric Grade:", calcNumericGrade())
-			 + String.format("%-15s%15s\n", "Letter Grade:", determineLetterGrade())
+			 + String.format("%-21s%7.2f\n", "Total STUDENT Score:", calcTotalStudentScores())
+			 + String.format("%-21s%7.2f\n", "Total MAX score:", totalMaxScore)
+			 + String.format("%-21s%7.2f\n", "Numeric Grade:", calcNumericGrade())
+			 + String.format("%-21s%7s\n", "Letter Grade:", determineLetterGrade())
 			 + "--------------------------------------------------------------------------------------";
 	}
 }
