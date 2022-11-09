@@ -20,6 +20,7 @@ public class FA2022_16WeeksGradingApplication_Caddell
 				//debug = false;
 		
 		Scanner keyboard = new Scanner(System.in);
+		FA2022_Student_Caddell student;
 				
 		do
 		{
@@ -93,16 +94,22 @@ public class FA2022_16WeeksGradingApplication_Caddell
 					break;
 				case 1:  	//Grade one student		
 					//Read student information from keyboard
-					FA2022_Student_Caddell student1 = studentGrades(keyboard, assignmentSizes, assignmentNames);
+					student = studentGrades(keyboard, assignmentSizes, assignmentNames);
 					
 					//Display student information to screen
-					System.out.println("\n" + student1);
+					System.out.println("\n" + student);
 					
 					//Write student information to file
-					student1.toFile();
+					student.toFile();
 					
 					break;
 				case 2:		//Display grade of one student from file
+					//Read input from keyboard
+					student = studentFile(keyboard, assignmentSizes, assignmentNames);
+					
+					//Display student information to screen
+					System.out.println("\n" + student);
+					
 					break;
 				case 3:		//Display grades of one class
 					break;
@@ -172,4 +179,69 @@ public class FA2022_16WeeksGradingApplication_Caddell
 		return student;
 	}
 
+	public static FA2022_Student_Caddell studentFile(Scanner keyboard, int[] assignmentSizes, String[] assignmentNames) throws IOException
+	{
+		String courseName,
+		       studentID = "e1234567",
+	           studentName;
+		float policyQuiz;
+		float[][] studentScores = new float[ARRAY_SIZE][];
+		String[] studentScoresString = new String[ARRAY_SIZE];
+		String studentFiles;
+		String[] testing = new String[50];
+		boolean found = false;
+		
+		//System.out.println("Enter the student ID number: ");
+		//studentID = keyboard.nextLine();
+		
+		File file = new File("student-grades.txt");
+		
+		if(!file.exists())
+		{
+			System.out.println("File does not exist.  Terminating program.");
+			System.exit(0);
+		}
+		
+		Scanner inputFile = new Scanner(file);
+		while(inputFile.hasNext() || !found)
+		{	
+			studentFiles = inputFile.nextLine();	
+			testing = studentFiles.split(", ");
+			
+			if (testing[1].equals(studentID))    //I think we can binary search this...
+			{
+				found = true;
+			}
+		}
+		
+		//I think I can make this a method...
+		courseName = testing[0];
+		studentID = testing[1];
+		studentName = testing[2];
+		policyQuiz = Float.parseFloat(testing[5]);
+		
+		for (int row = 0; row < ARRAY_SIZE; row++)
+		{
+			studentScores[row] = new float[assignmentSizes[row]];
+			
+			for (int col = 0; col < assignmentSizes[row]; col++)
+			{
+				studentScores[row][col] = Float.parseFloat(testing[6 + row]);
+			}
+		}
+		
+		for (int row = 0; row < ARRAY_SIZE; row++) //Definitely make this a method!!!
+		{
+			studentScoresString[row] = "";
+			for (int col = 0; col < studentScores[row].length; col++)
+			{
+				studentScoresString[row] += ((col > 0 ? ", " : "") + studentScores[row][col]);
+			}
+		}
+		
+		FA2022_Student_Caddell studentFile = new FA2022_Student_Caddell(courseName, studentID, studentName, policyQuiz, assignmentNames, studentScores, studentScoresString);
+		
+		inputFile.close();
+		return studentFile;
+	}
 }

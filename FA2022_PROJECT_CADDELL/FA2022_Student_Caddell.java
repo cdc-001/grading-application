@@ -35,11 +35,11 @@ public class FA2022_Student_Caddell
 	 * @param ss assignment score array
 	 * @param sss combined assignment score and name string
 	 */
-	public FA2022_Student_Caddell(String cn, String sn, String id, float ex, String[] an, float[][] ss, String[] sss)
+	public FA2022_Student_Caddell(String cn, String id, String sn, float ex, String[] an, float[][] ss, String[] sss)
 	{
 		courseName = cn;
-		studentName = sn;
 		studentID = id;
+		studentName = sn;
 		extraCreditScore = ex;
 		
 		for(int row = 0; row < ARRAY_SIZE; row++)
@@ -119,14 +119,15 @@ public class FA2022_Student_Caddell
 	{
 		PrintWriter outputFile = new PrintWriter("student-grades.txt");
 		
-		outputFile.print(courseName + ", " + studentID + ", " + ", " + studentName 
-						+ calcNumericGrade() + ", " + determineLetterGrade() + ",");
+		outputFile.print(courseName + ", " + studentID + ", " + studentName + ", "
+						+ String.format("%.2f", calcNumericGrade()) + ", " 
+						+ determineLetterGrade());
 		
 		for(int row = 0; row < studentScores.length; row++)
 		{
 			for (int col = 0; col < studentScores[row].length; col++)
 			{
-				outputFile.print(((col > 0) ? ", " : "") + studentScores[row][col]);
+				outputFile.print(", " + studentScores[row][col]);
 			}
 		}
 		
@@ -153,7 +154,7 @@ public class FA2022_Student_Caddell
 			 + "--------------------------------------------------------------------------------------\n"
 			 + String.format("%-21s%-15s\n", "COURSE NAME:", courseName)
 			 + String.format("%-21s%-15s\n", "STUDENT ID:", studentID)
-			 + String.format("%-21s%-15s\n", "NAME:", studentID)
+			 + String.format("%-21s%-15s\n", "NAME:", studentName)
 			 + "--------------------------------------------------------------------------------------\n"
 			 + String.format("%-21s%-15.2f\n", "POLICY QUIZ:", extraCreditScore)
 			 + String.format("%-21s%-15s\n", assignmentNames[0], studentScoresString[0])
