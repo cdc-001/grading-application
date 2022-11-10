@@ -127,7 +127,7 @@ public class FA2022_Student_Caddell
 		{
 			for (int col = 0; col < studentScores[row].length; col++)
 			{
-				outputFile.print(", " + studentScores[row][col]);
+				outputFile.print(", " + String.format("%.2f", studentScores[row][col]));
 			}
 		}
 		

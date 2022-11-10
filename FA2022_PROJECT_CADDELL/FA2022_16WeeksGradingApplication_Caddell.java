@@ -5,23 +5,19 @@ import java.io.*;
 
 public class FA2022_16WeeksGradingApplication_Caddell 
 {
-	final static int ARRAY_SIZE = 7;
 	public static void main(String[] args) throws IOException
 	{
+		String[] assignmentNames = {"Quiz", "Homework", "Lab", "Project", "Teamwork", "Topic", "Test"};						//Assignment categories
+		int[] assignmentSizes = new int[assignmentNames.length];															//How many assignments within each assignment category
+		float[] maxScores = new float[assignmentNames.length];																//Total score for each assignment category
 		
-		String[] assignmentNames = {"Quiz", "Homework", "Lab", "Project", "Teamwork", "Topic", "Test"};			//Assignment categories
-		int[] assignmentSizes = new int[ARRAY_SIZE];															//How many assignments within each assignment category
-		float[] maxScores = new float[ARRAY_SIZE];
+		Scanner keyboard = new Scanner(System.in);																			
+		int selection;																										//Menu selection
+		String input;																										//Raw keyboard input.  Used to convert from string to primitive data type.
+		char confirm;																										//Sentinel value for do-while loop
 		
-		int selection;																							//Menu selection
-		String input;
-		char confirm;
-		boolean debug = true;
-				//debug = false;
-		
-		Scanner keyboard = new Scanner(System.in);
-		FA2022_Student_Caddell student;
-		FA2022_Student_Caddell[] students;
+		FA2022_Student_Caddell student;																						//Reference to instance of student class
+		FA2022_Student_Caddell[] students;																					//Array containing all instances of student class
 				
 		do
 		{
@@ -29,22 +25,16 @@ public class FA2022_16WeeksGradingApplication_Caddell
 			System.out.println("FA2022_16WeeksGradingApplication_Caddell.java\n"
 							 + "LIST OF ASSIGNMENTS  – CORY CADDELL\n"
 							 + "--------------------------------------------------------------------\n"
-							 + "1.QUIZ\n2.HOMEWORK\n3.LAB\n4.PROJECT\n5.TEAMWORK\n6.TOPIC\n7.TEST\n0.EXIT");
+							 + "1.QUIZ\n2.HOMEWORK\n3.LAB\n4.PROJECT\n5.TEAMWORK\n6.TOPIC\n7.TEST\n0.EXIT\n");
 			
-			//Read input from user
-			selection = keyboard.nextInt();
-			System.out.println();
-			
-			while(selection < 0 || selection > 7)		//Input validation
-			{
-				System.out.print("Invalid selection.  Please try again. ");
-				selection = keyboard.nextInt();
-			}
+			//Read input from keyboard
+			System.out.print("Make a selection from the above menu: ");
+			selection = Validate.menuSelect(keyboard, 0, 7);
 			
 			confirm = 'n';
 			if (selection > 0)
 			{
-				System.out.print("How many " + assignmentNames[selection - 1] + " scores? ");
+				System.out.print("\nHow many " + assignmentNames[selection - 1] + " scores? ");
 				assignmentSizes[selection - 1] = keyboard.nextInt();
 				
 				System.out.print("Enter maximum score for each " + assignmentNames[selection - 1] + " assignment: "); 
@@ -55,8 +45,8 @@ public class FA2022_16WeeksGradingApplication_Caddell
 			else
 			{
 				//User, confirm input is correct
-				System.out.println("Confirm the following is correct: ");
-				for (int i = 0; i < ARRAY_SIZE; i++)
+				System.out.println("\nConfirm the following is correct: ");
+				for (int i = 0; i < assignmentNames.length; i++)
 				{
 					System.out.println("  " + 
 									   String.format("%-10s%-10s", assignmentNames[i] + ": ", "Total assignments = " 
@@ -66,7 +56,7 @@ public class FA2022_16WeeksGradingApplication_Caddell
 				keyboard.nextLine();
 				input = keyboard.nextLine();
 				input.toLowerCase();
-				confirm = input.charAt(0);
+				confirm = input.charAt(0);  //still case sensitive...
 				
 				while(confirm != 'y' && confirm != 'n')		//Input validation
 				{
@@ -80,14 +70,18 @@ public class FA2022_16WeeksGradingApplication_Caddell
 				
 		do
 		{
+			//Display menu
 			System.out.println("\nFA2022_16WeeksGradingApplication_Caddell.java\n"
 							 + "TASK OF GRADING – CORY CADDELL\n"
 							 + "--------------------------------------------------------------------\n"
 							 + "1.Grading One Student\n"
 							 + "2.Printing the Grade of One Studen from input file\n"
 							 + "3.Printing the Grades of Class\n"
-							 + "0.Exit");
-			selection = keyboard.nextInt();
+							 + "0.Exit\n");
+			
+			//Read input from keyboard
+			System.out.print("Make a selection from the above menu: ");
+			selection = Validate.menuSelect(keyboard, 0, 3);
 			
 			switch (selection)
 			{
@@ -126,12 +120,10 @@ public class FA2022_16WeeksGradingApplication_Caddell
 									 + "---------------------------------------------");
 					}
 					break;
-				default:
-					System.out.println("Invalid selection. Please try again.");
 			}
 		}while(selection != 0);
 		
-		System.out.println("Thank you! Have a nice day!");
+		System.out.println("\nThank you! Have a nice day!");
 	}
 
 	/** Method to read student information from keyboard and create object
@@ -147,8 +139,8 @@ public class FA2022_16WeeksGradingApplication_Caddell
 			   studentID,
 		       studentName;
 		float policyQuiz;
-		float[][] studentScores = new float[ARRAY_SIZE][];
-		String[] studentScoresString = new String[ARRAY_SIZE];
+		float[][] studentScores = new float[assignmentNames.length][];
+		String[] studentScoresString = new String[assignmentNames.length];
 				
 		System.out.println("Enter the following information for student: ");
 		keyboard.nextLine();
@@ -167,7 +159,7 @@ public class FA2022_16WeeksGradingApplication_Caddell
 		System.out.print("  Policy Quiz: ");
 		policyQuiz = keyboard.nextInt();
 		
-		for (int row = 0; row < ARRAY_SIZE; row++)
+		for (int row = 0; row < assignmentNames.length; row++)
 		{
 			studentScores[row] = new float[assignmentSizes[row]];
 
@@ -178,7 +170,7 @@ public class FA2022_16WeeksGradingApplication_Caddell
 			}
 		}
 		
-		for (int row = 0; row < ARRAY_SIZE; row++)
+		for (int row = 0; row < assignmentNames.length; row++)
 		{
 			studentScoresString[row] = "";
 			for (int col = 0; col < studentScores[row].length; col++)
@@ -204,13 +196,15 @@ public class FA2022_16WeeksGradingApplication_Caddell
 		       studentID,
 	           studentName;
 		float policyQuiz;
-		float[][] studentScores = new float[ARRAY_SIZE][];
-		String[] studentScoresString = new String[ARRAY_SIZE];
+		float[][] studentScores = new float[assignmentNames.length][];
+		String[] studentScoresString = new String[assignmentNames.length];
 		String studentFiles;
 		String[] testing = new String[50];									//Maybe test to see how many lines then initialize this way.
 		boolean found = false;
 		
-		System.out.println("Enter the student ID number: ");
+		keyboard.nextLine();
+		
+		System.out.print("Enter the student ID number: ");
 		studentID = keyboard.nextLine();
 		
 		File file = new File("student-grades.txt");
@@ -239,7 +233,7 @@ public class FA2022_16WeeksGradingApplication_Caddell
 		studentName = testing[2];
 		policyQuiz = Float.parseFloat(testing[5]);
 		
-		for (int row = 0; row < ARRAY_SIZE; row++)
+		for (int row = 0; row < assignmentNames.length; row++)
 		{
 			studentScores[row] = new float[assignmentSizes[row]];
 			
@@ -249,12 +243,13 @@ public class FA2022_16WeeksGradingApplication_Caddell
 			}
 		}
 		
-		for (int row = 0; row < ARRAY_SIZE; row++) //Definitely make this a method!!!
+		for (int row = 0; row < assignmentNames.length; row++) //Definitely make this a method!!!
 		{
 			studentScoresString[row] = "";
 			for (int col = 0; col < studentScores[row].length; col++)
 			{
-				studentScoresString[row] += ((col > 0 ? ", " : "") + studentScores[row][col]);
+				studentScoresString[row] += ((col > 0 ? ", " : "")
+						+ String.format("%.2f", studentScores[row][col]));
 			}
 		}
 		
@@ -270,8 +265,8 @@ public class FA2022_16WeeksGradingApplication_Caddell
 	       studentID = "e1234567",
         studentName;
 		float policyQuiz;
-		float[][] studentScores = new float[ARRAY_SIZE][];
-		String[] studentScoresString = new String[ARRAY_SIZE];
+		float[][] studentScores = new float[assignmentNames.length][];
+		String[] studentScoresString = new String[assignmentNames.length];
 		String studentFiles;
 		String[] testing = new String[50];									//Maybe test to see how many lines then initialize this way.
 
@@ -296,7 +291,7 @@ public class FA2022_16WeeksGradingApplication_Caddell
 			studentName = testing[2];
 			policyQuiz = Float.parseFloat(testing[5]);
 			
-			for (int row = 0; row < ARRAY_SIZE; row++)
+			for (int row = 0; row < assignmentNames.length; row++)
 			{
 				studentScores[row] = new float[assignmentSizes[row]];
 				
@@ -306,12 +301,13 @@ public class FA2022_16WeeksGradingApplication_Caddell
 				}
 			}
 			
-			for (int row = 0; row < ARRAY_SIZE; row++) //Definitely make this a method!!!
+			for (int row = 0; row < assignmentNames.length; row++) //Definitely make this a method!!!
 			{
 				studentScoresString[row] = "";
 				for (int col = 0; col < studentScores[row].length; col++)
 				{
-					studentScoresString[row] += ((col > 0 ? ", " : "") + studentScores[row][col]);
+					studentScoresString[row] += ((col > 0 ? ", " : "")
+								+ String.format("%.2f", studentScores[row][col]));
 				}
 			}
 
