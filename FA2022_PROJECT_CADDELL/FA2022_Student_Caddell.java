@@ -137,10 +137,10 @@ public class FA2022_Student_Caddell
 	/** Method to display minimum student information to screen */
 	public String shortOutput()
 	{
-		return 	String.format("%-15s%15.2f\n", "Total STUDENT Score:", calcTotalStudentScores())
-			  + String.format("%-15s%15.2f\n", "Total MAX score:", totalMaxScore)
-		  	  + String.format("%-15s%15.2f\n", "Numeric Grade:", calcNumericGrade())
-		  	  + String.format("%-15s%1sf\n", "Letter Grade:", determineLetterGrade());
+		return 	String.format("%-21s%15s\n", "STUDENT ID:", studentID)
+			  + String.format("%-21s%15s\n", "NAME:", studentName)
+			  + String.format("%-21s%15.2f\n", "Numeric Grade:", calcNumericGrade())
+			  + String.format("%-21s%15s\n", "Letter Grade:", determineLetterGrade());
 	}
 	
 	/**

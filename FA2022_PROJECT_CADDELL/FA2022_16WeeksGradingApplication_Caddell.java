@@ -21,6 +21,7 @@ public class FA2022_16WeeksGradingApplication_Caddell
 		
 		Scanner keyboard = new Scanner(System.in);
 		FA2022_Student_Caddell student;
+		FA2022_Student_Caddell[] students;
 				
 		do
 		{
@@ -104,7 +105,7 @@ public class FA2022_16WeeksGradingApplication_Caddell
 					
 					break;
 				case 2:		//Display grade of one student from file
-					//Read input from keyboard
+					//Read input from keyboard and file
 					student = studentFile(keyboard, assignmentSizes, assignmentNames);
 					
 					//Display student information to screen
@@ -112,6 +113,18 @@ public class FA2022_16WeeksGradingApplication_Caddell
 					
 					break;
 				case 3:		//Display grades of one class
+					//Read input from file
+					students = courseFiles(keyboard, assignmentSizes, assignmentNames);
+										
+					//Display student information to screen
+					System.out.println("FA2022_16WeeksGradingApplication_Caddell.java\n"
+									 + "LIST OF STUDENTS' GRADES - CORY CADDELL\n"
+									 + "---------------------------------------------\n");
+					for (FA2022_Student_Caddell display : students)
+					{
+						System.out.println(display.shortOutput()
+									 + "---------------------------------------------");
+					}
 					break;
 				default:
 					System.out.println("Invalid selection. Please try again.");
@@ -121,12 +134,12 @@ public class FA2022_16WeeksGradingApplication_Caddell
 		System.out.println("Thank you! Have a nice day!");
 	}
 
-	/** Method to read student information and create object
+	/** Method to read student information from keyboard and create object
 	 * 
 	 * @param keyboard Scanner class object to read keyboard input.
-	 * @param assignmentSizes Number of assignments per assignment category
-	 * @param assignmentNames Assignment category names
-	 * @return Instance of FA2022_Student_Caddell class
+	 * @param assignmentSizes Number of assignments per assignment category.
+	 * @param assignmentNames Assignment category names.
+	 * @return Instance of FA2022_Student_Caddell class.
 	 */
 	public static FA2022_Student_Caddell studentGrades(Scanner keyboard, int[] assignmentSizes, String[] assignmentNames)
 	{
@@ -178,21 +191,27 @@ public class FA2022_16WeeksGradingApplication_Caddell
 		
 		return student;
 	}
-
+	/** Method to read student information from file and create object
+	 * 
+	 * @param keyboard Scanner class object to read keyboard input.
+	 * @param assignmentSizes Number of assignments per assignment category.
+	 * @param assignmentNames Assignment category names.
+	 * @return Instance of FA2022_Student_Caddell class.
+	 */
 	public static FA2022_Student_Caddell studentFile(Scanner keyboard, int[] assignmentSizes, String[] assignmentNames) throws IOException
 	{
 		String courseName,
-		       studentID = "e1234567",
+		       studentID,
 	           studentName;
 		float policyQuiz;
 		float[][] studentScores = new float[ARRAY_SIZE][];
 		String[] studentScoresString = new String[ARRAY_SIZE];
 		String studentFiles;
-		String[] testing = new String[50];
+		String[] testing = new String[50];									//Maybe test to see how many lines then initialize this way.
 		boolean found = false;
 		
-		//System.out.println("Enter the student ID number: ");
-		//studentID = keyboard.nextLine();
+		System.out.println("Enter the student ID number: ");
+		studentID = keyboard.nextLine();
 		
 		File file = new File("student-grades.txt");
 		
@@ -243,5 +262,64 @@ public class FA2022_16WeeksGradingApplication_Caddell
 		
 		inputFile.close();
 		return studentFile;
+	}
+	
+	public static FA2022_Student_Caddell[] courseFiles (Scanner keyboard, int[] assignmentSizes, String[] assignmentNames) throws IOException
+	{
+		String courseName,
+	       studentID = "e1234567",
+        studentName;
+		float policyQuiz;
+		float[][] studentScores = new float[ARRAY_SIZE][];
+		String[] studentScoresString = new String[ARRAY_SIZE];
+		String studentFiles;
+		String[] testing = new String[50];									//Maybe test to see how many lines then initialize this way.
+
+		FA2022_Student_Caddell[] courseFiles = new FA2022_Student_Caddell[20];
+		File file = new File("student-grades.txt");
+		
+		if(!file.exists())
+		{
+			System.out.println("File does not exist.  Terminating program.");
+			System.exit(0);
+		}
+		
+		Scanner inputFile = new Scanner(file);
+		int count = 0;
+		while(inputFile.hasNext())
+		{	
+			studentFiles = inputFile.nextLine();	
+			testing = studentFiles.split(", ");
+			
+			courseName = testing[0];
+			studentID = testing[1];
+			studentName = testing[2];
+			policyQuiz = Float.parseFloat(testing[5]);
+			
+			for (int row = 0; row < ARRAY_SIZE; row++)
+			{
+				studentScores[row] = new float[assignmentSizes[row]];
+				
+				for (int col = 0; col < assignmentSizes[row]; col++)
+				{
+					studentScores[row][col] = Float.parseFloat(testing[6 + row]);
+				}
+			}
+			
+			for (int row = 0; row < ARRAY_SIZE; row++) //Definitely make this a method!!!
+			{
+				studentScoresString[row] = "";
+				for (int col = 0; col < studentScores[row].length; col++)
+				{
+					studentScoresString[row] += ((col > 0 ? ", " : "") + studentScores[row][col]);
+				}
+			}
+
+			courseFiles[count] = new FA2022_Student_Caddell(courseName, studentID, studentName, policyQuiz, assignmentNames, studentScores, studentScoresString);
+			count++;
+		}
+		
+		inputFile.close();
+		return courseFiles;
 	}
 }
