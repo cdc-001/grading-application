@@ -117,7 +117,8 @@ public class FA2022_Student_Caddell
 	/** Method to write student information to output file */
 	public void toFile() throws IOException
 	{
-		PrintWriter outputFile = new PrintWriter("student-grades.txt");
+		FileWriter fwriter = new FileWriter("student-grades.txt", true);
+		PrintWriter outputFile = new PrintWriter(fwriter);
 		
 		outputFile.print(courseName + ", " + studentID + ", " + studentName + ", "
 						+ String.format("%.2f", calcNumericGrade()) + ", " 
@@ -130,6 +131,7 @@ public class FA2022_Student_Caddell
 				outputFile.print(", " + String.format("%.2f", studentScores[row][col]));
 			}
 		}
+		outputFile.println();
 		
 		outputFile.close();
 	}
@@ -169,6 +171,6 @@ public class FA2022_Student_Caddell
 			 + String.format("%-21s%7.2f\n", "Total MAX score:", totalMaxScore)
 			 + String.format("%-21s%7.2f\n", "Numeric Grade:", calcNumericGrade())
 			 + String.format("%-21s%7s\n", "Letter Grade:", determineLetterGrade())
-			 + "--------------------------------------------------------------------------------------";
+			 + "--------------------------------------------------------------------------------------\n";
 	}
 }
