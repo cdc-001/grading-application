@@ -70,7 +70,7 @@ public class FA2022_16WeeksGradingApplication_Caddell
 					break;
 				case 1:  	//Grade one student		
 					//Read student information from keyboard
-					student = studentGradesFromKeyboard(keyboard, assignmentSizes, assignmentNames);
+					student = studentGradesFromKeyboard(keyboard, assignmentSizes, assignmentNames, maxScores);
 					
 					//Display student information to screen
 					System.out.println("\n" + student);
@@ -80,7 +80,7 @@ public class FA2022_16WeeksGradingApplication_Caddell
 					break;
 				case 2:		//Display grade of one student from file
 					//Read input from keyboard and file
-					student = studentGradesFromFile(keyboard, assignmentSizes, assignmentNames);
+					student = studentGradesFromFile(keyboard, assignmentSizes, assignmentNames, maxScores);
 					
 					//Display student information to screen
 					if (student == null)
@@ -95,7 +95,7 @@ public class FA2022_16WeeksGradingApplication_Caddell
 					break;
 				case 3:		//Display grades of one class
 					//Read input from file
-					allStudents.addAll(allStudentGradesFromFile(assignmentSizes, assignmentNames));
+					allStudents.addAll(allStudentGradesFromFile(assignmentSizes, assignmentNames, maxScores));
 										
 					//Display student information to screen
 					System.out.println("\nFA2022_16WeeksGradingApplication_Caddell.java\n"
@@ -108,6 +108,8 @@ public class FA2022_16WeeksGradingApplication_Caddell
 					}
 					System.out.println();
 					break;
+				default:
+					System.out.println("Invalid entry.  Please, try again");
 			}
 		}while(selection != 0);
 		
@@ -181,7 +183,7 @@ public class FA2022_16WeeksGradingApplication_Caddell
 	 * @param assignmentNames Assignment category names.
 	 * @return Instance of FA2022_Student_Caddell class.
 	 */
-	public static FA2022_Student_Caddell studentGradesFromKeyboard(Scanner keyboard, int[] assignmentSizes, String[] assignmentNames)
+	public static FA2022_Student_Caddell studentGradesFromKeyboard(Scanner keyboard, int[] assignmentSizes, String[] assignmentNames, float[] maxScores)
 	{
 		String courseName,															
 			   studentID,
@@ -221,8 +223,7 @@ public class FA2022_16WeeksGradingApplication_Caddell
 				
 		scoresToString(assignmentNames, studentScoresString, studentScores);
 		
-		//!!!THIS IS MY ISSUE!!!
-		FA2022_Student_Caddell student = new FA2022_Student_Caddell(courseName, studentID, studentName, policyQuiz, assignmentNames, studentScores, studentScoresString);	
+		FA2022_Student_Caddell student = new FA2022_Student_Caddell(courseName, studentID, studentName, policyQuiz, assignmentNames, studentScores, studentScoresString, maxScores);	
 				
 		return student;
 	}
@@ -234,7 +235,7 @@ public class FA2022_16WeeksGradingApplication_Caddell
 	 * @param assignmentNames Assignment category names.
 	 * @return Instance of FA2022_Student_Caddell class.
 	 */
-	public static FA2022_Student_Caddell studentGradesFromFile(Scanner keyboard, int[] assignmentSizes, String[] assignmentNames) throws IOException
+	public static FA2022_Student_Caddell studentGradesFromFile(Scanner keyboard, int[] assignmentSizes, String[] assignmentNames, float[] maxScores) throws IOException
 	{
 		String searchForMe,
 			   inputLine;
@@ -263,7 +264,7 @@ public class FA2022_16WeeksGradingApplication_Caddell
 			
 			if (fileLineElements[1].equals(searchForMe))    				//Student IDs are stored in the second element of the array.
 			{
-				studentFile = studentScoresFromFile(assignmentNames, assignmentSizes, fileLineElements);
+				studentFile = studentScoresFromFile(assignmentNames, assignmentSizes, fileLineElements, maxScores);
 				found = true;
 			}
 		}
@@ -275,7 +276,7 @@ public class FA2022_16WeeksGradingApplication_Caddell
 	/** Method to read classroom scores from file and create object.
 	 * 
 	 */
-	public static ArrayList<FA2022_Student_Caddell> allStudentGradesFromFile (int[] assignmentSizes, String[] assignmentNames) throws IOException
+	public static ArrayList<FA2022_Student_Caddell> allStudentGradesFromFile (int[] assignmentSizes, String[] assignmentNames, float[] maxScores) throws IOException
 	{
 		String inputLine;
 		String[] fileLineElements;
@@ -296,7 +297,7 @@ public class FA2022_16WeeksGradingApplication_Caddell
 			fileLineElements = new String[inputLine.length()];
 			fileLineElements = inputLine.split(", ");
 
-			allStudentFiles.add(studentScoresFromFile(assignmentNames, assignmentSizes, fileLineElements));
+			allStudentFiles.add(studentScoresFromFile(assignmentNames, assignmentSizes, fileLineElements, maxScores));
 		}
 		
 		inputFile.close();
@@ -329,7 +330,7 @@ public class FA2022_16WeeksGradingApplication_Caddell
 	 * @param studentScores
 	 * @param assignmentSizes
 	 */
-	public static FA2022_Student_Caddell studentScoresFromFile(String[] assignmentNames, int[] assignmentSizes, String[] fileLineElements)
+	public static FA2022_Student_Caddell studentScoresFromFile(String[] assignmentNames, int[] assignmentSizes, String[] fileLineElements, float[]maxScores)
 	{		
 		float[][] studentScores = new float[assignmentNames.length][];
 		String[] studentScoresString = new String[assignmentNames.length];
@@ -339,19 +340,21 @@ public class FA2022_16WeeksGradingApplication_Caddell
 		String studentName = fileLineElements[2];
 		Float policyQuiz = Float.parseFloat(fileLineElements[5]);
 		
-			for (int row = 0; row < assignmentNames.length; row++)
+		int count = 6;	
+		for (int row = 0; row < assignmentNames.length; row++)
+		{
+			studentScores[row] = new float[assignmentSizes[row]];
+			
+			for (int col = 0; col < assignmentSizes[row]; col++)
 			{
-				studentScores[row] = new float[assignmentSizes[row]];
-				
-				for (int col = 0; col < assignmentSizes[row]; col++)
-				{
-					studentScores[row][col] = Float.parseFloat(fileLineElements[6 + row]);
-				}
+				studentScores[row][col] = Float.parseFloat(fileLineElements[count]);
+				count++;
 			}
+		}
 			
 		scoresToString(assignmentNames, studentScoresString, studentScores);
 
-		FA2022_Student_Caddell studentFile = new FA2022_Student_Caddell(courseName, studentID, studentName, policyQuiz, assignmentNames, studentScores, studentScoresString);
+		FA2022_Student_Caddell studentFile = new FA2022_Student_Caddell(courseName, studentID, studentName, policyQuiz, assignmentNames, studentScores, studentScoresString, maxScores);
 		
 		return studentFile;
 	}

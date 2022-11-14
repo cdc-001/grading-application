@@ -8,7 +8,8 @@ public class FA2022_Student_Caddell
 	private String studentID;									// Student ID number
 	private String studentName;									// Name of student
 	private float extraCreditScore;								// Score of extra credit assignment
-	private float totalMaxScore;									// Cumulative score of all assignments
+	private float totalMaxScore;								// Cumulative highest possible score of all assignments
+	private float totalStudentScore;
 	
 	private final int ARRAY_SIZE = 7;
 	private String[] assignmentNames = new String[ARRAY_SIZE];		// Names of each assignment category
@@ -35,46 +36,44 @@ public class FA2022_Student_Caddell
 	 * @param ss assignment score array
 	 * @param sss combined assignment score and name string
 	 */
-	public FA2022_Student_Caddell(String cn, String id, String sn, float ex, String[] an, float[][] ss, String[] sss)
+	public FA2022_Student_Caddell(String cn, String id, String sn, float ex, String[] an, float[][] ss, String[] sss, float[] ms)
 	{
 		courseName = cn;
 		studentID = id;
 		studentName = sn;
 		extraCreditScore = ex;
 		
-		for(int row = 0; row < ARRAY_SIZE; row++)
+		totalMaxScore = 0.0f;
+		for(int row = 0; row < an.length; row++)
 		{
 			assignmentNames[row] = an[row];
 			studentScoresString[row] = sss[row];
+			totalMaxScore += ms[row];
+			
+			studentScores[row] = new float[ss[row].length];
 			
 			for (int col = 0; col < ss[row].length; col++)
 			{
-				studentScores[row] = ss[col];
+				studentScores[row][col] = ss[row][col];
 			}
 		}	
 	}
 	
 	/** Method to calculate cumulative total max score of all standard assignments */
-	public float calcTotalMaxScore()
+	public float calcTotalStudentScore()
 	{
-		totalMaxScore = 0;
+		totalStudentScore = 0;
 		for (int row = 0; row < studentScores.length; row++)
 		{
 			for (int col = 0; col < studentScores[row].length; col++)
 			{
-				totalMaxScore += studentScores[row][col];
+				totalStudentScore += studentScores[row][col];
 			}
 		}
-		return totalMaxScore;
-	}
-	
-	/** 
-	 * Method to calculate total student score
-	 * @return  sum of total max score and extra credit score
-	*/
-	public float calcTotalStudentScores()
-	{
-		return calcTotalMaxScore() + extraCreditScore;
+		
+		totalStudentScore += extraCreditScore;
+		
+		return totalStudentScore;
 	}
 	
 	/**
@@ -83,7 +82,7 @@ public class FA2022_Student_Caddell
 	 */
 	public float calcNumericGrade()
 	{
-		return 100 * calcTotalStudentScores() / calcTotalMaxScore();
+		return 100 * calcTotalStudentScore() / totalMaxScore;
 	}
 	
 	/**
@@ -122,7 +121,7 @@ public class FA2022_Student_Caddell
 		
 		outputFile.print(courseName + ", " + studentID + ", " + studentName + ", "
 						+ String.format("%.2f", calcNumericGrade()) + ", " 
-						+ determineLetterGrade());
+						+ determineLetterGrade() + ", " + extraCreditScore);
 		
 		for(int row = 0; row < studentScores.length; row++)
 		{
@@ -167,7 +166,7 @@ public class FA2022_Student_Caddell
 			 + String.format("%-21s%-15s\n", assignmentNames[5], studentScoresString[5])
 			 + String.format("%-21s%-15s\n", assignmentNames[6], studentScoresString[6])
 			 + "--------------------------------------------------------------------------------------\n"
-			 + String.format("%-21s%7.2f\n", "Total STUDENT Score:", calcTotalStudentScores())
+			 + String.format("%-21s%7.2f\n", "Total STUDENT Score:", calcTotalStudentScore())
 			 + String.format("%-21s%7.2f\n", "Total MAX score:", totalMaxScore)
 			 + String.format("%-21s%7.2f\n", "Numeric Grade:", calcNumericGrade())
 			 + String.format("%-21s%7s\n", "Letter Grade:", determineLetterGrade())
