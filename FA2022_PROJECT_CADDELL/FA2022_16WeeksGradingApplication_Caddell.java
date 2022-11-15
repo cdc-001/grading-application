@@ -13,12 +13,11 @@ public class FA2022_16WeeksGradingApplication_Caddell
 		float[] maxScores = new float[assignmentNames.length];												//Total score for each assignment category
 		
 		Scanner keyboard = new Scanner(System.in);																			
-		int selection;																						//Menu selection
 		final int sentinel = 0;
-		char confirm = 'n';																					//Sentinel value for do-while loop
+		int selection;																						//Menu selection
 		
 		FA2022_Student_Caddell student;																		//Reference to instance of student class
-		ArrayList<FA2022_Student_Caddell> allStudents = new ArrayList<>();												//ArrayList containing all instances of student class
+		ArrayList<FA2022_Student_Caddell> allStudents = new ArrayList<>();									//ArrayList containing all instances of student class
 				
 		do
 		{
@@ -31,11 +30,10 @@ public class FA2022_16WeeksGradingApplication_Caddell
 				System.out.println((i + 1) + "." + assignmentNames[i]);						
 			}
 			System.out.println(sentinel + ".Exit\n" );
-
 			
 			//Read input from keyboard
 			System.out.print("Make a selection from the above menu: ");
-			selection = Validate.menuSelect(keyboard, sentinel, assignmentNames.length);					//Arguments include minimum menu value and maximum menu value, respectively.
+			selection = Validate.menuSelect(keyboard, sentinel, assignmentNames.length);					//Validate selection. Arguments include minimum menu value and maximum menu value, respectively.
 			
 			if (selection > 0)
 			{
@@ -44,10 +42,10 @@ public class FA2022_16WeeksGradingApplication_Caddell
 			}
 			else
 			{
-				//User, confirm input is correct
-				confirm = userConfirm(keyboard, assignmentNames, selection, assignmentSizes, maxScores, confirm);
+				//Allow user to review their input
+				selection = userConfirm(keyboard, assignmentNames, selection, assignmentSizes, maxScores);
 			}
-		}while(confirm != 'y');
+		}while(selection != sentinel);
 				
 		do
 		{
@@ -62,7 +60,7 @@ public class FA2022_16WeeksGradingApplication_Caddell
 			
 			//Read input from keyboard
 			System.out.print("Make a selection from the above menu: ");
-			selection = Validate.menuSelect(keyboard, sentinel, 3);
+			selection = Validate.menuSelect(keyboard, sentinel, 3);											//Validate selection. Arguments include minimum menu value and maximum menu value, respectively.
 			
 			switch (selection)
 			{
@@ -85,7 +83,7 @@ public class FA2022_16WeeksGradingApplication_Caddell
 					//Display student information to screen
 					if (student == null)
 					{
-						System.out.println("Could not locate student in file.");
+						System.out.println("\nCould not locate student in file.\n");
 					}
 					else
 					{
@@ -108,10 +106,8 @@ public class FA2022_16WeeksGradingApplication_Caddell
 					}
 					System.out.println();
 					break;
-				default:
-					System.out.println("Invalid entry.  Please, try again");
 			}
-		}while(selection != 0);
+		}while(selection != sentinel);
 		
 		System.out.println("\nThank you! Have a nice day!");
 	}
@@ -143,15 +139,12 @@ public class FA2022_16WeeksGradingApplication_Caddell
 	 * @param selection Menu selection entered by user.
 	 * @param assignmentSizes Number of assignments per assignment category.
 	 * @param maxScores Total score for each assignment category
-	 * @param input Raw keyboard input.  Used to convert from string to primitive data type.
-	 * @param confirm Sentinel value for do-while loop
-	 * @return Yes is sentinel value.  No returns to main menu.
+	 * @return Yes return sentinel value, 0.  No returns -1 to return user to main menu.
 	 */
-	public static char userConfirm(Scanner keyboard, String[] assignmentNames, int selection, int[] assignmentSizes, float[] maxScores, char confirm)
+	public static int userConfirm(Scanner keyboard, String[] assignmentNames, int selection, int[] assignmentSizes, float[] maxScores)
 	{
-		String input = "";												 //Used to convert from string to primitive data type.
-		char yorn;
-		float totalMaxScore;
+		String input = "";												//Used to convert from string to primitive data type.
+		float totalMaxScore;											//Cumulative max possible score on all assignments
 		
 		System.out.println("\nConfirm the following is correct: ");
 		
@@ -166,14 +159,21 @@ public class FA2022_16WeeksGradingApplication_Caddell
 				+ "  Total: " + totalMaxScore);
 		
 		System.out.print("Enter 'y' to continue or 'n' to return to main menu: ");
-		keyboard.nextLine();											//Flush out buffer.
+		keyboard.nextLine();											
 		input = keyboard.nextLine();
-		yorn = input.toLowerCase().charAt(0);
 		
-		confirm = Validate.yesOrNo(keyboard, input, yorn);				//Validate whether user entered y or n.
+		if (Validate.yesOrNo(keyboard, input) == 'y') 					//Validate whether user entered y or n.
+		{
+			selection = 0;												//Proceed to next menu
+		}
+		else
+		{
+			selection = -1;												//Return to main menu
+		}
+		
 		System.out.println();
 		
-		return confirm;
+		return selection;
 	}
 
 	/** Method to read student information from keyboard and create object.
@@ -192,8 +192,8 @@ public class FA2022_16WeeksGradingApplication_Caddell
 		float[][] studentScores = new float[assignmentNames.length][];
 		String[] studentScoresString = new String[assignmentNames.length];
 				
-		System.out.println("\nEnter the following information for student: ");
-		keyboard.nextLine();														//Flush out buffer
+		System.out.println("\nEnter the following information for the student: ");
+		keyboard.nextLine();														
 		
 		System.out.print("  Course name: ");
 		courseName = keyboard.nextLine();
@@ -211,7 +211,7 @@ public class FA2022_16WeeksGradingApplication_Caddell
 		
 		for (int row = 0; row < assignmentNames.length; row++)
 		{
-			studentScores[row] = new float[assignmentSizes[row]];
+			studentScores[row] = new float[assignmentSizes[row]];							//Set ragged array columns
 
 			for (int col = 0; col < assignmentSizes[row]; col++)
 			{
@@ -237,10 +237,10 @@ public class FA2022_16WeeksGradingApplication_Caddell
 	 */
 	public static FA2022_Student_Caddell studentGradesFromFile(Scanner keyboard, int[] assignmentSizes, String[] assignmentNames, float[] maxScores) throws IOException
 	{
-		String searchForMe,
-			   inputLine;
-		String[] fileLineElements;									
-		boolean found = false;
+		String searchForMe,																//Student ID number user chooses to search for
+			   inputLine;																//Line of information for found student
+		String[] fileLineElements;														//Array to hold each element of the line string separately
+		boolean found = false;															//Stop loop if student ID is found in file.
 		FA2022_Student_Caddell studentFile = null;
 				
 		System.out.print("\nEnter the student ID number you wish to search for: ");
@@ -252,17 +252,17 @@ public class FA2022_16WeeksGradingApplication_Caddell
 		if(!file.exists())
 		{
 			System.out.println("File does not exist.  Terminating program.");
-			System.exit(0);													//Do I need to exit whole program?
+			System.exit(0);													
 		}
 		
 		Scanner inputFile = new Scanner(file);
-		while(inputFile.hasNext() || !found)
+		while(inputFile.hasNext() && !found)	
 		{	
 			inputLine = inputFile.nextLine();	
 			fileLineElements = new String[inputLine.length()];
 			fileLineElements = inputLine.split(", ");
-			
-			if (fileLineElements[1].equals(searchForMe))    				//Student IDs are stored in the second element of the array.
+									
+			if (fileLineElements[1].equals(searchForMe))    							//Student IDs are stored in the second element of the array.
 			{
 				studentFile = studentScoresFromFile(assignmentNames, assignmentSizes, fileLineElements, maxScores);
 				found = true;

@@ -25,7 +25,7 @@ public class Validate
 	 */
 	public static float isPositiveFloat(Scanner keyboard)
 	{
-		float num = 0;
+		float num = 0.0f;
 		
 		do
 		{
@@ -81,14 +81,16 @@ public class Validate
 	 * @param yorn
 	 * @return
 	 */
-	public static char yesOrNo(Scanner keyboard, String input, char yorn)
+	public static char yesOrNo(Scanner keyboard, String input)
 	{
+		char yorn = input.toLowerCase().charAt(0);
+		
 		while(yorn != 'y' && yorn != 'n')		//Input validation
 		{
-			System.out.print("\nInvalid entry. "
+			System.out.print("Invalid entry. "
 							+ "Enter 'y' to proceed or 'n' to return to main menu: ");
 			input = keyboard.nextLine();
-			yorn = input.charAt(0);
+			yorn = input.toLowerCase().charAt(0);
 		}
 		
 		return yorn;
