@@ -3,7 +3,7 @@ This program calculates student grades from file and/or keyboard input, and disp
 
 Intended users are professors, teachers, administrators, etc.
 
-Pseudo-Code:
+Driver Class Pseudo-Code:
     
     1) Display menu:
         I. Read menu selection from keyboard
@@ -22,4 +22,6 @@ Pseudo-Code:
                 i. Display class grades from file to screen
     4) Repeat step 3 until user selects to exit program.
     
-![Screenshot from 2022-12-10 14-12-46](https://user-images.githubusercontent.com/107145275/206873634-bb4e271a-7b95-41b0-aae9-e76c1f3669d8.png)
+![Screenshot from 2022-12-10 14-30-32](https://user-images.githubusercontent.com/107145275/206874171-dd96223a-9768-43a7-bc2b-245c62d605d2.png)
+
+![Screenshot from 2022-12-10 14-30-23](https://user-images.githubusercontent.com/107145275/206874172-4ea6f8eb-0405-4a94-ba62-b3c2fd36b764.png)
