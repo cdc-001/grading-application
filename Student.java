@@ -1,8 +1,8 @@
-//FA2022_Student_Caddell.java
+//Student.java
 
 import java.io.*;
 
-public class FA2022_Student_Caddell 
+public class Student 
 {
 	private String courseName;										// Name of course
 	private String studentID;										// Student ID number
@@ -17,7 +17,7 @@ public class FA2022_Student_Caddell
 	private float[] maxScores = new float[ARRAY_SIZE];				// Cumulative maximum score per assignment category 
 	
 	/** Method to create no-argument constructor */
-	public FA2022_Student_Caddell()
+	public Student()
 	{
 		courseName = "";
 		firstName = "";
@@ -27,7 +27,7 @@ public class FA2022_Student_Caddell
 	}
 	
 	/** Method to create parameterized constructor	 */
-	public FA2022_Student_Caddell(String cn, String id, String fn, String ln, float ex, String[] an, float[][] ss, String[] sss, float[] ms)
+	public Student(String cn, String id, String fn, String ln, float ex, String[] an, float[][] ss, String[] sss, float[] ms)
 	{
 		courseName = cn;
 		firstName = fn;
