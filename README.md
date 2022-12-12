@@ -1,5 +1,5 @@
 # grading-application
-This program calculates student grades from file and/or keyboard input, and displays student information reports to screen.
+Calculate student grades from file and/or keyboard input, and displays student information reports to screen.
 
 Intended users are professors, teachers, administrators, etc.
 
